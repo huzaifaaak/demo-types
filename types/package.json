@@ -1,0 +1,35 @@
+{
+    "name": "@bridghq/types",
+    "version": "2021.05.02.084906",
+    "description": "The core API types for Bridg",
+    "main": "lib/index",
+    "types": "lib/types/index.d.ts",
+    "author": "Bridg",
+    "license": "UNLICENSED",
+    "repository": {
+        "type": "git",
+        "url": "git@github.com:bridghq/core.git"
+    },
+    "files": [
+        "README.md",
+        "lib/"
+    ],
+    "dependencies": {
+        "zod": "2.0.0-beta.30"
+    },
+    "scripts": {
+        "copy:interfaces": "copyfiles -f ../src/**/*.interface.ts ./src/interfaces",
+        "copy:prisma": "copyfiles -f ../src/**/prisma-client/index.d.ts ./lib/types/prisma-client && copyfiles -f ../src/**/prisma-client/runtime/*.d.ts ./lib/types/prisma-client/runtime",
+        "copy:tmp": "cp -R src .tmp",
+        "pre:build": "rm -rf lib && yarn copy:interfaces && yarn copy:prisma && yarn copy:tmp && node generate-index",
+        "build:package": "tsc -p .",
+        "build": "node build",
+        "post:build": "node update-paths && rm -rf .tmp"
+    },
+    "devDependencies": {
+        "copyfiles": "2.4.1"
+    },
+    "publishConfig": {
+        "registry": "https://npm.pkg.github.com"
+    }
+}
